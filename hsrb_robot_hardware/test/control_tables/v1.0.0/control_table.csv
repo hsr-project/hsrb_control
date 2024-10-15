@@ -1,0 +1,285 @@
+﻿種別,型,名前,説明,単位,MKSへの変換,種類,初期値,control,hand,用途,－
+機能情報,uint8_t,const_id,ID,[-],－,static_param,0,o,o,各軸のID,アラームステータスを解除する場合、ここに0を書き込む
+ ,uint8_t,present_driver_class,このドライバの種別,[-],－,present,0,o,o,0:dc_hand、1:dc、2:dcbl(上位からドライバの種別を知るときに使用),－
+ ,uint8_t,command_write_nvm,Write_EEPROM,[0/1],－,order,0,o,o,EEPROMに書き込みたいときは、ここを1にする。書き込み失敗時は、alarm_statusのbit7が成立する。,－
+ ,uint8_t,command_drive_mode,Drive_Mode,[-],－,order,0,o,o,"0:制御なし_1:電圧_2:電流_3:速度_4:位置_5:速度＋位置(MR)_6:速度（AVAGO)_7:速度＋位置(AVAGO)_8:位置(avago), 速度(MR)_9:インピーダンス_20:ハンド握りこみ_21:ハンド位置制御_22:ハンドSE制御",Verのつけ方は別途参照
+,uint8_t,present_supply_voltage,電源電圧,[V],1.00E+00,present,1.00E+00,o,o,現在基盤に供給されている電圧,－
+,uint8_t,present_12v_voltage,12V電源電圧,[V],1.00E+00,present,1.00E+00,o,o,－,－
+,uint8_t,present_motor_voltage,モータ電圧,[V],1.00E+00,present,1.00E+00,o,o,－,－
+ ,int8_t,present_temperature,現在基板温度,[degC],1.00E+00,present,1.00E+00,o,o,基盤温度,－
+ ,uint16_t,present_alarm_status,アラームステータス,[-],－,present,0.00E+00,o,o,エラー発生時に該当bitが立つ,－
+,uint32_t,present_safety_alarm_status,機能安全用アラームステータス,[-],－,present,0,o,o,－,－
+ ,uint32_t,present_time_stamp,電源ONからの時刻,[tick(125usec)],8000,present,0,o,o,約140時間で一巡する,－
+ ,uint16_t,present_firmware_ver,firmwareのVer,[-],－,present,0,o,o,firmwareのVerを設定,－
+ ,uint64_t,present_md5_upper,コントロールテーブルのバージョン(上位),[-],－,present,0,o,o,コントロールテーブルのVer,0x8060000からのログ領域に書かれている
+ ,uint64_t,present_md5_lower,コントロールテーブルのバージョン(下位),[-],－,present,0,o,o,コントロールテーブルのVer,0x8060000からのログ領域に書かれている
+ ,uint16_t,present_warning,ワーニングステータス（ステータスパケットで返されるもの),[-],－,present,0,o,o,－,ハンドは0:反時計回り 1:時計回り、ハンド以外ではbit0:avago回転方向 bit1:MRエンコーダ回転方向（2bits）
+ ,uint32_t,present_logic_error_pram,ロジックエラー時のエラーパラメータ項目,[-],－,present,0,o,o,－,－
+ ,uint16_t,const_burst_write_address,Burstインストラクションで書き込むアドレス,[-],－,static_param,0,o,o,Burstインストラクションで送られてきたデータを書き込むアドレス,－
+ ,uint16_t,const_burst_write_size,Burstインストラクションで書き込むサイズ,[-],－,static_param,0,o,o,Burstインストラクションで送られてきたデータを書き込むサイズ（現在未使用）,－
+ ,uint16_t,const_burst_read_address,Burstインストラクションで読み出しのアドレス,[-],－,static_param,0,o,o,Burstインストラクションで送り返すデータの先頭アドレス,－
+ ,uint16_t,const_burst_read_size,Burstインストラクションで読み出しのサイズ,[-],－,static_param,0,o,o,Burstインストラクションで送り返すデータのサイズ,デバッグ用
+ ,uint16_t,present_log_power_cycle,電源ONした回数(未使用だが互換性の為、残す),[-],－,present,－,o,o,電源ONした回数。電源OFF時にフラッシュのROM領域に書き込まれ、次回ON時に読み込まれる,下位3bitがそれぞれのセンサの状態を表す
+ ,uint32_t,present_log_motor_rev_total,通算モータ回転数,[rev],1.00E+00,present,－,o,o,前回電源OFF時の通算モータ回転数,すべての位置表現の大元
+メカ情報,uint8_t,const_rot_direction,各計測器の回転方向,[-],－,static_param,0,o,o,ギアの構成によってMRエンコーダとAVAGOの回転方向の符号が異なるときに使用する,－
+ ,uint16_t,const_motor_to_joint_ratio_numerator,エンコーダからavagoへの減速比分子,[-],－,static_param,0,o,x,通常は”gear_ratio_numerator”と同じ値だが、別の経路でMRエンコーダとAVAGOがつながっている時は異なる値となる,－
+ ,uint16_t,const_motor_to_joint_ratio_denominator,エンコーダからavagoへの減速比分母,[-],－,static_param,0,o,x,通常は”gear_ratio_denominator”と同じ値だが、別の経路でMRエンコーダとAVAGOがつながっている時は異なる値となる,－
+ ,uint16_t,const_gear_ratio_numerator,ギア比分子,[-],－,static_param,0,o,o,モータ軸から出力軸までのギア比分母,－
+ ,uint16_t,const_gear_ratio_denominator,ギア比分母,[-],－,static_param,0,o,o,モータ軸から出力軸までのギア比分母,モータ軸についているMRエンコーダのパルス数
+ ,uint32_t,present_total_rotation,モーターの総回転数,[rev],－,present,0,o,o,モータの総回転数,AVAGOがつながっていないと0xFFFFになる。
+基本計測値,int16_t,present_hall_position,ホールセンサの現在値,[-],－,present,0,o,x,ホールセンサの位置。,－
+,int64_t,present_motor_position,モータ軸位置[pulse],[pulse],－,present,0,o,x,モータ軸の位置をパルス数で表したもの。,－
+ ,int64_t,present_motor_outaxis_position,出力軸位置[urad],[urad],1.00E+06,present,0,o,x,モータの位置をパルス数で表したものに乗数をかけて、[urad]で表したもの,－
+ ,int32_t,present_motor_pulse_velocity,モータ軸速度[pulse/s],[pulse/s],1.00E+00,present,0,o,x,モータ軸の位置に定数とギア比をかけて出力軸の位置で表したもの,－
+ ,int64_t,present_motor_position_velocity,モータ軸速度[urad/s],[urad/s],1.00E+06,present,0,o,x,モータ軸速度[urad/s]。LPF処理されている。,－
+ ,int64_t,present_motor_outaxis_velocity,出力軸速度[urad/s],[urad/s],1.00E+06,present,0,o,x,present_raw_mr_motor_velocityに定数をかけたもの。出力軸速度[urad/s],－
+ ,uint16_t,const_motor_encoder_pulse,エンコーダのパルス数(逓倍前。内部で4逓倍している)(512~1000),[pulse/rev],－,static_param,－,o,x,present_raw_mr_motor_velocityに定数とギア比をかけて出力軸の速度で表したもの,－
+ ,uint16_t,present_avago_real,AVAGO読み取りの本当の生値,[digit],－,present,0,o,x,SPIから読んだAVAGOの生値をそのまま入れている。AVAGOの接続の可否の判断に使用する,－
+基本制御関係,uint8_t,const_interpolation_flag,指令値補間機能有効フラグ,[0/1],--,static_param,0,o,o,0:補完機能無効 1:補完機能有効,－
+,int16_t,const_interpolation_com_cycle,指令値補間機能通信周期,[msec],1.00E+03,static_param,0,o,o,－,－
+,int32_t,const_mr_encoder_lpf_cut,(現在未使用)MRエンコーダ・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,int32_t,const_mr_encoder_lpf_sampling,AVAGOエンコーダ・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+,int32_t,const_avago_encoder_lpf_cut,AVAGOエンコーダ・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,ただし、９５０以上与えると出力段ハイサイドFETドライバのチャージが動かなくなることがある
+,int32_t,const_avago_encoder_lpf_sampling,AVAGOエンコーダ・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,電圧制御以外の場合は、上位コントローラ（電流、速度、位置）などで計算されている値が入る。
+,int32_t,const_pot1_lpf_cut,ポテンショ1・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,ハイサイドドライバのチャージポンプ動作不良を防ぐため950程度にする。
+,int32_t,const_pot1_lpf_sampling,ポテンショ1・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,DCBLの場合は、現在駆動されている相の値を示す。時定数2ms程度のLPFが入っている。
+,int32_t,const_pot2_lpf_cut,ポテンショ2・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,int32_t,const_pot2_lpf_sampling,ポテンショ2・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+,int32_t,const_pot3_lpf_cut,ポテンショ3・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,int32_t,const_pot3_lpf_sampling,ポテンショ3・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,電流フィードバックではどちらかというと比例より積分で追従させたほうがなめらかである。
+電圧制御関係,int16_t,ref_duty_goal,電圧指令モードのduty指令値,[‰digit],－,order,0,o,o,電圧指令モードでのduty指令値(0～1000)。,－
+,int16_t,present_duty,現在出力しているduty値,[‰digit],－,present,－,o,o,現在出力されているduty値(0～1000)。,－
+ ,uint16_t,const_duty_limit,出力するdutyのリミット(~1000),[‰digit],－,static_param,0,o,o,電圧指令モードでduty_goalを出力する前の制限値(0～1000)。,電流積分誤差current_ierrの絶対値がこの値以上にならない。
+電流制御関係,int16_t,present_current,現在電流,[mA],1.00E+03,present,0,o,o,現在モータに流れている電流値を電流センサで測ったもの。(BLDCの場合はQ軸電流値),－
+ ,uint16_t,const_current_limit,電流制御リミット,[mA],1.00E+03,static_param,0,o,o,出力する電流の上限値。,current_ierr_maxにより絶対値の上限が決められている。
+ ,int16_t,ref_current_goal,電流指令値,[mA],1.00E+03,order,0,o,o,電流制御モードでの指令値。(BLDCの場合はQ軸指令値),－
+ ,int16_t,present_current_goal,目標電流(リミット後),[mA],1.00E+03,present,0,o,o,current_goalをcurrent_limitで制限したもの。,－
+ ,uint16_t,const_current_pgain,電流比例ゲイン,[digit/mA],1.00E-03,static_param,0,o,o,電流制御における比例ゲイン。,－
+ ,uint16_t,const_current_igain,電流積分ゲイン,[digit/(mA・s)],1.00E-03,static_param,0,o,o,電流制御における積分ゲイン。,－
+,uint16_t,const_current_dgain,電流微分ゲイン,[digit/(mA/s)],1.00E-03,static_param,0,o,o,－,－
+ ,uint32_t,const_current_ierr_max,電流積分誤差最大値,[uA・sec],1.00E+06,static_param,0,o,o,電流積分誤差最大値。,－
+ ,int16_t,present_current_perr,電流比例誤差,[mA],1.00E+03,present,0,o,o,現在の電流比例誤差。,－
+ ,int32_t,present_current_ierr,電流積分誤差,[uA・sec],1.00E+06,present,0,o,o,現在の電流積分誤差。,－
+,int32_t,present_current_derr,電流微分誤差,[uA/sec],1.00E+06,present,0,o,o,－,－
+ ,int32_t,const_current_lpf_cut,ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するカットオフ周波数。,－
+ ,int32_t,const_current_lpf_sampling,ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+電子サーマル,uint16_t,const_nominal_current,定格電流,[mA],1.00E+03,static_param,0,o,o,電子サーマル制御で使用,－
+,float,const_thermal_resistance_housing_ambient,ハウジング熱抵抗,[K/W],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_thermal_resistance_core_housing,巻線熱抵抗,[K/W],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_thermal_time_constant_core,巻線熱時定数,[sec],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_thermal_time_constant_motor,モータ熱時定数,[sec],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_terminal_resistance,端子間抵抗,[ohm],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_terminal_inductacne,端子間インダクタンス,[mH],1.00E+03,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_torque_constant,トルク定数,[mNm/A],1.00E+03,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,const_speed_constant,回転数定数,[rpm/V],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,－
+ ,float,present_heat,現在損失,[W],1.00E+00,present,0,o,o,電子サーマル制御で使用,－
+ ,float,present_housing_temp_equil,ハウジング平衡温度,[degC],1.00E+00,present,0,o,o,電子サーマル制御で使用,－
+ ,float,present_core_temp_equil,巻線平衡温度,[degC],1.00E+00,present,0,o,o,電子サーマル制御で使用,－
+ ,float,present_housing_temp,ハウジング推定温度,[degC],1.00E+00,present,0,o,o,電子サーマル制御で使用,－
+ ,float,present_core_temp,巻線推定温度,[degC],1.00E+00,present,0,o,o,電子サーマル制御で使用,位置の微分ゲインとして働く。
+ ,float,const_core_temp_limit,巻線許容温度,[degC],1.00E+00,static_param,0,o,o,電子サーマル制御で使用,位置の比例ゲインとして働く。
+ ,uint8_t,present_thermal_overload_rate,熱的なオーバーロードレート(電子サーマル制御で使用),[%],－,present,0,o,o,電子サーマル制御で使用,位置の微分ゲインとして働く。
+トルク制御関係,uint32_t,const_max_effort_continuous,最大連続トルク,[uNm],1.00E+06,static_param,0,x,o,－,－
+,uint16_t,const_max_effort_instant_ratio,瞬時最大トルクの最大連続トルクに対する割合,[%],－,static_param,0,x,o,－,－
+ ,int32_t,present_effort,現在トルク,[uNm],1.00E+06,present,0,x,o,－,－
+ ,float,ref_effort_goal,目標トルク指令値,[uNm],1.00E+06,order,0,x,o,－,－
+ ,float,present_effort_goal,目標トルク指令値(リミット後),[uNm],1.00E+06,present,0,x,o,－,－
+速度制御関係,uint32_t,const_velocity_pgain,速度制御比例ゲイン,[uA/(mrad/s)],1.00E+03,static_param,0,o,x,速度制御における比例ゲイン。,実際の制御はこの値を現在値として行われる。
+,uint32_t,const_velocity_igain,速度制御積分ゲイン,[uA/mrad],1.00E+03,static_param,0,o,x,速度制御における積分ゲイン。,－
+,uint32_t,const_velocity_dgain,速度制御微分ゲイン,[uA/mrad/(s*s)],1.00E+03,static_param,0,o,x,速度制御における微分ゲイン。,－
+ ,int64_t,present_velocity_perr,速度比例誤差,[urad/s],1.00E+06,present,0,o,x,現在の速度比例誤差。,－
+ ,int32_t,present_velocity_ierr,速度積分誤差,[urad],1.00E+06,present,0,o,x,現在の速度積分誤差。,－
+ ,int32_t,present_velocity_derr,速度微分誤差,[urad/(s*s)],1.00E+06,present,0,o,x,現在の速度積分誤差。,－
+ ,uint32_t,const_velocity_ierr_max,速度積分誤差最大値,[urad],1.00E+06,static_param,0,o,x,速度積分誤差velocity_ierrの絶対値の最大値。,－
+,uint8_t,const_velocity_i_sw,速度制御用・i_sw,[0/1],－,static_param,0,o,x,0:i_sw無効　1:i_sw有効,－
+ ,int64_t,present_velocity_goal_motor,モータ軸速度目標値,[urad/s],1.00E+06,present,0,o,x,モータ軸の速度目標値。指令値である出力軸速度指令値velocity_goal_outaxisよりギア比から計算される。,－
+ ,int64_t,ref_velocity_goal_outaxis,出力軸速度指令値,[urad/s],1.00E+06,order,0,o,x,出力軸の速度目標値。指令値として与える。,－
+ ,uint32_t,const_velocity_goal_outaxis_clamp,出力軸速度指令値をクランプする値,[urad/s],1.00E+06,static_param,0,o,x,出力値の速度目標値をクランプする値の絶対値。,－
+ ,int64_t,present_velocity_goal_outaxis,実際に制御に使われる出力軸速度指令値,[urad/s],1.00E+06,present,0,o,x,実際に制御に使われる出力軸の速度目標値。,－
+ ,int32_t,const_velocity_lpf_cut,ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するカットオフ周波数。,－
+ ,int32_t,const_velocity_lpf_sampling,ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+,int32_t,const_velocity_posdiff_lpf_cut,速度制御・位置微分値・ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,int32_t,const_velocity_posdiff_lpf_sampling,速度制御・位置微分値・ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+位置制御関係,int64_t,ref_position_goal_outaxis,出力軸位置指令値,[urad],1.00E+06,order,0,o,o,位置制御モードにおける出力軸目標位置。指令値として与える。,－
+,int64_t,const_position_goal_outaxis_clamp_max,出力軸位置指令値をクランプする上側の値,[urad],1.00E+06,static_param,0,o,x,出力軸目標位置をクランプする値の上側。,速度制御比例ゲインが同じような働きをするので、通常は0でよい。
+ ,int64_t,const_position_goal_outaxis_clamp_min,出力軸位置指令値をクランプする下側の値,[urad],1.00E+06,static_param,0,o,x,出力軸目標位置をクランプする値の下側。,速度制御比例ゲインが同じような働きをするので、通常は0でよい。
+ ,int64_t,present_position_goal_outaxis,実際に制御に使われる出力軸位置指令値,[urad],1.00E+06,present,0,o,o,位置制御モードにおける出力軸目標位置をクランプした値。実際に制御に使われる指令値。,－
+ ,int64_t,present_position_perr,目標位置比例誤差,[urad],1.00E+06,present,0,o,o,現在の位置比例誤差。,範囲は 0 ～ (263 - 1)
+ ,int64_t,present_position_ierr,目標位置積分誤差,[urad/s],1.00E+06,present,0,x,o,現在の位置積分誤差。,－
+ ,int64_t,present_position_derr,目標位置微分誤差,[urad/s],1.00E+06,present,0,o,o,現在の位置微分誤差。,AVAGOのセンサと磁石を取り付けた時に機械的に決まる。
+ ,int64_t,present_velocity_goal_by_poscon,位置制御ループによる出力軸目標速度,[urad/s],1.00E+06,present,0,o,x,位置制御により求まった速度制御の目標値。この値が速度制御ループに渡される。,軸を機械原点に移動させ、その時のavago_rawの値を入れる。
+ ,uint16_t,const_position_pgain,位置制御比例ゲイン,[(mrad/s)/mrad],1.00E+00,static_param,0,o,x,位置制御比例ゲイン。,－
+ ,uint16_t,const_position_igain,位置制御積分ゲイン,[(mrad/s)/(mrad・s)],1.00E+03,static_param,0,o,x,位置制御積分ゲイン。,主にavagoの非線形誤差をキャリブレーションする際に用いる。
+ ,uint16_t,const_position_dgain,位置制御微分ゲイン,[(urad/s)/(mrad/s)],1.00E+03,static_param,0,o,x,位置制御微分ゲイン。,avagoのみを用いた速度制御に用いる。
+ ,uint64_t,ref_position_control_vmax,位置目標制御の速度最大値,[urad/s],1.00E+06,order,0,o,x,出力軸の位置目標値。指令値として与える。,avagoのみを用いた位置制御に用いる。
+ ,uint64_t,const_position_control_vmax_clamp,位置目標制御の速度最大値の制限値,[urad/s],1.00E+06,static_param,0,o,x,出力軸の位置目標値をクランプする値。,キャリブレーションツールにて使用するデータ
+ ,uint64_t,present_position_control_vmax,実際に制御に使われる位置目標制御の速度最大値,[urad/s],1.00E+06,present,0,o,x,実際に制御に使われる出力軸の位置指令値。,－
+avago,int16_t,present_joint_raw,avagoの生値(rot_direction_bit0によって方向補正済み),×(1/16384)[digit],－,present,0,o,x,AVAGO磁気エンコーダから読み取った生値。rot_directionのbit0により回転方向に対する増減方向が変わっている。,－
+ ,int16_t,const_joint_offset,avagoのオフセット値,×(1/16384)[digit],－,static_param,0,o,x,avago_rawが0の位置に対する、機械原点のオフセット。,－
+ ,int16_t,present_joint_diff_offset,avagoの生値からavagoのオフセット値を引いたもの,×(1/16384)[digit],－,present,0,o,x,avagoの生値からavagoのオフセット値を引いたもの。,－
+ ,int64_t,present_joint_calc_motor_position,avagoからMRエンコーダの位置を計算したもの,[pulse],－,present,0,o,x,avago_posを、mr_to_avago_ratio_numeratorとmr_to_avago_ratio_denominatorとmr_encoder_pulseとrot_directionからモータ軸位置をmrエンコーダパルスの単位に変換したもの。,－
+ ,int64_t,present_joint_calc_motor_velocity,avagoから計算したモータ軸速度,[urad/s],1.00E+06,present,0,o,x,avago_posを微分し、モータ軸速度を求めたもの。,－
+ ,int64_t,present_joint_calc_outaxis_position,avagoから計算した出力軸位置,[urad],1.00E+06,present,0,o,x,avago_posから計算した出力軸位置。,－
+ ,int16_t,present_joint_pos_corrected,avagoの生値からavagoのオフセット値を引いたものを補正した値,×(1/16384)[digit],－,present,0,o,x,キャリブレーション後の補正値,－
+ ,int64_t,present_joint_calc_outaxis_correct_position,補正されたavagoから計算した出力軸位置,[urad],1.00E+06,present,0,o,x,－,－
+ ,int64_t,present_joint_calc_outaxis_correct_velocity,補正されたavagoから計算した出力軸速度,[urad/s],1.00E+06,present,0,o,x,－,－
+ ,int64_t,present_motor_calc_joint_position,補正されたavagoから計算したモータ軸位置,[urad],1.00E+06,present,0,o,x,－,－
+ ,int64_t,present_motor_calc_joint_velocity,補正されたavagoから計算したモータ軸速度,[urad/s],1.00E+06,present,0,o,x,－,－
+ ,float,const_joint_interp_coeff0,キャリブ係数0次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff1,キャリブ係数1次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff2,キャリブ係数2次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff3,キャリブ係数3次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff4,キャリブ係数4次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff5,キャリブ係数5次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff6,キャリブ係数6次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff7,キャリブ係数7次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff8,キャリブ係数8次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff9,キャリブ係数9次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff10,キャリブ係数10次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff11,キャリブ係数11次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_coeff12,キャリブ係数12次,[-],－,static_param,0,o,x,キャリブ係数,－
+ ,float,const_joint_interp_average_diff_offset,キャリブ係数の演算に使用したavago_posの平均値(値は1000分の1倍したもの),×(1/(16384×1000))[digit],－,static_param,0,o,x,キャリブレーション,－
+ ,float,const_joint_interp_average_error,キャリブ係数の演算に使用した誤差値の平均値(値は1000分の1倍したもの),×(1/(16384×1000))[digit],－,static_param,0,o,x,キャリブレーション,－
+ ,float,const_joint_interp_stddev_diff_offset,キャリブ係数の演算に使用したavago_posの標準偏差(値は1000分の1倍したもの),×(1/(16384×1000))[digit],－,static_param,0,o,x,キャリブレーション,－
+ ,float,const_joint_interp_stddev_error,キャリブ係数の演算に使用した誤差値の標準偏差(値は1000分の1倍したもの),×(1/(16384×1000))[digit],－,static_param,0,o,x,キャリブレーション,－
+ ,uint16_t,const_joint2motor_threshold,kAvago2Mrインストラクションを実行した時、許容するばらつき(モータ軸エンコーダのパルス数),[pulse],－,static_param,1000,o,x,キャリブレーション,－
+インピーダンス,float,const_ic_inertia,インピーダンス制御・慣性M,[kgm^2],1.00E+00,static_param,0,o,x,インピーダンス制御で使用する定数,－
+,float,const_ic_damping,インピーダンス制御・仮想粘性D,[uN・ms/urad],1.00E+00,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_ic_spring_coefficient,インピーダンス制御・仮想バネ係数K,[uN・m/urad],1.00E+00,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,uint8_t,const_ic_switch_external_torque,インピーダンス制御・外力推定使用選択,[0/1],－,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,int32_t,ref_feedforward_torque,インピーダンス制御・フィードフォワードトルク,[uN・m],1.00E+06,order,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_ic_kinematic_friction,インピーダンス制御・動摩擦力,[uN・m],1.00E+06,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_ic_viscous_friction,インピーダンス制御・粘性摩擦係数,[uN・ms/urad],1.00E+00,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,uint32_t,const_spring_torque_limit,インピーダンス制御・バネトルクの上限,[uN・m],1.00E+06,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,uint32_t,const_external_torque_deadband,インピーダンス制御・外力推定の不感帯,[uN・m],1.00E+06,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_damping_torque_deadband,インピーダンス制御・粘性トルクの不感帯,[uN・m],1.00E+06,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_friction_torque_deadband,インピーダンス制御・摩擦補償の不感帯,[uN・m],1.00E+06,static_param,0,o,x,インピーダンス制御で使用する定数,－
+ ,float,const_ic_joint_stiffness,インピーダンス制御・関節剛性,[uN・m/urad],1.00E+00,static_param,0,o,x,インピーダンス制御で使用する定数,－
+,uint32_t,const_hand_threshold_stop_force,ハンド握りこみ・closeからの制御変移の為の指先力閾値,[mN],1.00E+03,static_param,0,x,o,－,－
+,uint16_t,const_hand_duration_stop_count,ハンド握りこみ・指先力閾値以上で連続で続いた時に停止したと判断する時間,[ms],1.00E+03,static_param,0,x,o,－,－
+,uint16_t,const_hand_duration_stop_timeout,ハンド握りこみ・closeタイムアウト時間,[ms],1.00E+03,static_param,0,x,o,－,－
+,uint16_t,const_hand_grasp_full_current_time,ハンド握りこみ・graspの握りこみ時間,[ms],1.00E+03,static_param,0,x,o,－,－
+,float,const_hand_grasp_tss_current_reduction,ハンド握りこみ・torqueSupplyStop電流減少率,[A/s],1.00E+00,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_spring_constant,バネ定数,[mNm/rad],1.00E+03,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_spring_max_extension_angle,バネ最大伸展角度,[mrad],1.00E+03,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_moment_arm_length,モーメントアームの長さ,[mm],1.00E+03,static_param,0,x,o,－,－
+ ,int16_t,const_hand_spring_preset_angle,バネ初期組み付け角度,[mrad],1.00E+03,static_param,0,x,o,－,－
+ ,int32_t,const_hand_calib_position01_start,ポテンショ1，2のキャリブ参照角度1点目,[urad],1.00E+06,static_param,0,x,o,－,－
+ ,int32_t,const_hand_calib_position01_end,ポテンショ1，2のキャリブ参照角度2点目,[urad],1.00E+06,static_param,0,x,o,－,－
+ ,int32_t,const_hand_calib_position23_start,ポテンショ3，4のキャリブ参照角度1点目,[urad],1.00E+06,static_param,0,x,o,－,－
+ ,int32_t,const_hand_calib_position23_end,ポテンショ3，4のキャリブ参照角度2点目,[urad],1.00E+06,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position0_start,ポテンショ1のキャリブ参照角度の生値1点目,[digit],－,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position0_end,ポテンショ1のキャリブ参照角度の生値2点目,[digit],－,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position1_start,ポテンショ2のキャリブ参照角度の生値1点目,[digit],－,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position1_end,ポテンショ2のキャリブ参照角度の生値2点目,[digit],－,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position2_start,ポテンショ3のキャリブ参照角度の生値1点目,[digit],－,static_param,0,x,o,－,－
+ ,uint16_t,const_hand_calib_raw_position2_end,ポテンショ3のキャリブ参照角度の生値2点目,[digit],－,static_param,0,x,o,－,－
+ ,int16_t,present_hand_raw_position0,ポテンショ1の生値,[digit],－,present,0,x,o,－,－
+ ,int16_t,present_hand_raw_position1,ポテンショ2の生値,[digit],－,present,0,x,o,－,－
+ ,int16_t,present_hand_raw_position2,ポテンショ3の生値,[digit],－,present,0,x,o,－,－
+ ,int32_t,present_hand_motor_position,位置1,[urad],1.00E+06,present,0,x,o,－,－
+ ,int32_t,present_hand_left_position,位置2,[urad],1.00E+06,present,0,x,o,－,－
+ ,int32_t,present_hand_right_position,位置3,[urad],1.00E+06,present,0,x,o,－,－
+ ,int32_t,present_hand_motor_velocity,速度1,[urad/s],1.00E+06,present,0,x,o,－,－
+ ,int32_t,present_hand_left_velocity,速度2,[urad/s],1.00E+06,present,0,x,o,－,－
+ ,int32_t,present_hand_right_velocity,速度3,[urad/s],1.00E+06,present,0,x,o,－,－
+ ,int16_t,present_hand_left_force,現在力,[mN],1.00E+03,present,0,x,o,－,－
+ ,int16_t,present_hand_right_force,現在力,[mN],1.00E+03,present,0,x,o,－,－
+ ,int16_t,ref_hand_force_goal,目標力指令値,[mN],1.00E+03,order,0,x,o,－,－
+ ,int16_t,present_hand_force_goal,目標力指令値(リミット後),[mN],1.00E+03,present,0,x,o,－,－
+ ,uint16_t,const_hand_force_limit,力リミット,[mN],1.00E+03,static_param,0,x,o,－,－
+,uint16_t,const_hand_position_velocity_pgain,ハンド位置制御・速度比例ゲイン,[(mrad/s)/mrad],1.00E+03,static_param,0,x,o,－,－
+,uint64_t,const_hand_position_velocity_control_limit,ハンド位置制御・速度指令最大値,[urad/s],1.00E+06,static_param,0,x,o,－,－
+,float,const_hand_position_perr_threshold,ハンド位置制御・ハンチング対策の比例誤差スレッショルド,[rad],1.00E+03,static_param,0,x,o,－,－
+,uint64_t,ref_hand_control_vmax,ハンド位置制御・位置目標制御の速度最大値,[urad/s],1.00E+06,order,0,x,o,－,－
+ ,uint32_t,const_hand_effort_constant,トルク定数(ハンド用),[uNm/A],1.00E+06,static_param,0,x,o,－,－
+ ,uint8_t,ref_hand_grasping_flag,握り込みフラグ,[0/1],－,order,0,x,o,握り込みフラグ。1をセットすると握り込みが開始され、握り込み後ロックすると0にリセットされる,－
+ ,int32_t,const_hand_position_lpf_cut,ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するカットオフ周波数。,－
+ ,int32_t,const_hand_force_lpf_cut,ローパスフィルタカットオフ周波数,[rad/sec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するカットオフ周波数。,－
+ ,int32_t,const_hand_position_lpf_sampling,ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+ ,int32_t,const_hand_force_lpf_sampling,ローパスフィルタサンプリング周期,×125[usec],1.00E+00,static_param,0,o,o,ローパスフィルタで使用するサンプリング周期。,－
+,uint32_t,const_hand_force_offset,ハンドSE制御・力オフセット,[mN],1.00E+03,static_param,0,－,o,－,－
+,float,const_hand_ic_M,ハンドSE制御・慣性M,[kgm^2],1.00E+00,static_param,0,－,o,－,－
+,float,const_hand_ic_D,ハンドSE制御・仮想粘性D,[uN・ms/urad],1.00E+00,static_param,0,－,o,－,－
+,float,const_hand_ic_K,ハンドSE制御・仮想バネ係数K,[uN・m/urad],1.00E+00,static_param,0,－,o,－,－
+,int64_t,ref_hand_joint_position,ハンドSE制御・位置指令,[urad],1.00E+06,order,0,－,o,－,－
+,int64_t,const_hand_position_max,ハンドSE制御・位置指令最大値,[urad],1.00E+06,static_param,0,－,o,－,－
+,uint8_t,const_hand_position_velsns_select,ハンド制御・速度制御用センサ選択用フラグ,[-],－,static_param,0,－,o,0:MRエンコーダ　1:ポテンショ,－
+,uint8_t,const_hand_position_possns_select,ハンド制御・位置制御用センサ選択用フラグ,[-],－,static_param,0,－,o,0:MRエンコーダ　1:ポテンショ,－
+,int64_t,ref_hand_grasping_final_pos,ハンド握りこみ・close握りこみ最終位置,[urad],1.00E+06,order,0,x,o,－,－
+,uint16_t,ref_hand_grasping_time,ハンド握りこみ・close握り込み開閉時間,[ms],1.00E+03,order,0,x,o,－,異常の場合、present_alarm_statusのbit0が1となる。
+,uint8_t,const_hand_profile_select,ハンド握りこみ時、位置プロファイル選択用フラグ,－,－,static_param,0,－,o,0:無効 1:有効,ソフトリミットとして用いる。
+,int16_t,const_hand_profile_genparam_a,ハンド握りこみ時、位置プロファイル軌道生成パラメータ(a),×1[-],－,static_param,0,－,o,－,ソフトリミットとして用いる。
+,int16_t,const_hand_profile_genparam_b,ハンド握りこみ時、位置プロファイル軌道生成パラメータ(b),×1[-],－,static_param,0,－,o,－,異常の場合present_alarm_statusのbit2が1となる。
+,int16_t,const_hand_profile_genparam_c,ハンド握りこみ時、位置プロファイル軌道生成パラメータ(e),×1[-],－,static_param,0,－,o,－,－
+,int16_t,const_hand_profile_genparam_d,ハンド握りこみ時、位置プロファイル軌道生成パラメータ(f),×1[-],－,static_param,0,－,o,－,－
+,int16_t,const_hand_profile_genparam_e,ハンド握りこみ時、位置プロファイル軌道生成パラメータ(g),×1[-],－,static_param,0,－,o,－,異常の場合present_alarm_statusのbit5が1となる。
+安全機能,int8_t,const_diag_threshold_temperature,基板温度上限値,[degC],1.00E+00,static_param,0,o,o,基板温度の上限値。,異常の場合present_alarm_statusのbit6が1となる。
+,uint16_t,const_diag_duration_temperature,基板温度異常時間,×100[ms],1.00E+01,static_param,0,o,o,基板温度の上限値を超えた状態が何100ms続いたらアラームとする。,警告の場合present_warningのbit1が1となる。
+ ,int64_t,const_diag_threshold_highest_outaxis_position,出力軸位置上限値(ソフトリミット),[urad],1.00E+06,static_param,0,o,o,出力軸の位置の上限値。,警告の場合present_warningのbit3が1となる。
+ ,int64_t,const_diag_threshold_lowest_outaxis_position,出力軸位置下限値(ソフトリミット),[urad],1.00E+06,static_param,0,o,o,出力軸の位置の下限値。,警告の場合present_warningのbit5が1となる。
+ ,uint16_t,const_diag_duration_over_position,出力軸位置ソフトリミット過位置時間,×100[ms],1.00E+01,static_param,0,o,o,出力軸位置が上限値下限値を超えた時に異常とする時間,警告の場合present_warningのbit8が1となる。
+ ,uint16_t,const_diag_threshold_deviation_velocity_ierr,出力軸位置制御偏差上限値(速度積分誤差),[mrad],1.00E+03,static_param,0,o,o,速度制御、位置制御モードで、制御偏差の代表値である、速度積分誤差の上限値。,－
+ ,uint16_t,const_diag_threshold_deviation_position,出力軸位置制御偏差上限値(現在値と指令値の誤差),[mrad],1.00E+03,static_param,0,o,o,速度制御、位置制御モードで、制御偏差の代表値である、指令値と現在値誤差の上限値。,異常の場合present_alarm_statusのbit3が1となる。
+ ,uint16_t,const_diag_duration_deviation_velocity_ierr,制御偏差異常時間(速度制御積分誤差),×100[ms],1.00E+01,static_param,0,o,o,制御偏差が上限値を超えた時に異常とする時間,異常の場合present_alarm_statusのbit14が1となる。
+ ,uint16_t,const_diag_duration_deviation_position,制御偏差異常時間(位置指令値と現在位置の差),×100[ms],1.00E+01,static_param,0,o,o,制御偏差が上限値を超えた時に異常とする時間,－
+ ,uint16_t,const_diag_duration_command_velocity,速度指令途絶警告時間,×100[ms],1.00E+01,static_param,0,o,o,速度指令値が一定時間通知されなかったときに警告出力する時間。,異常の場合present_alarm_statusのbit7が1となる。
+ ,uint16_t,const_diag_duration_command_current,電流指令途絶警告時間,×100[ms],1.00E+01,static_param,0,o,o,電流指令値が一定時間通知されなかったときに警告出力する時間。,－
+ ,uint16_t,const_diag_duration_command_duty,電圧指令途絶警告時間,×100[ms],1.00E+01,static_param,0,o,o,電圧指令値が一定時間通知されなかったときに警告出力する時間。,－
+ ,uint16_t,const_diag_duration_overload,定格電流超え警告時間,×100[ms],1.00E+01,static_param,0,o,o,電流値が定格電流値を超えたときに警告出力する時間。,－
+ ,uint16_t,const_diag_threshold_current,モータ電流上限値,[mA],1.00E+03,static_param,0,o,o,モータ電流上限値,－
+ ,uint16_t,const_diag_duration_current,モータ電流異常時間,×100[ms],1.00E+01,static_param,0,o,o,モータ電流が上限値を超えた時に異常とする時間,－
+ ,uint8_t,present_diag_avago_connected,AVAGOが起動時に接続されているかどうか,[0/1],－,present,0,o,o,起動時にAVAGOが接続されている場合1になる。1の状態で、途中でAVAGOが0～16383以外の値を返したらAVAGO断線とみなしてアラームとする,－
+,uint16_t,const_diag_duration_avago_connected_err,AVAGOセンサ異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+ ,uint8_t,present_diag_current_sensor_ng,電流センサが起動時に異常かどうか,[0/1],－,present,0,o,o,起動時に電流センサの偏りとばらつきを調べている。その結果正常なら0となる。異常なら1となり、今後常にアラームステータスのkAlarmCurrentSensor=1となる,－
+,uint16_t,const_diag_duration_thermal_core_temp,電子サーマル異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,uint16_t,const_adiag_com_mcu001_err_time,共通・ROMチェック異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,uint16_t,const_adiag_com_mcu002_err_time,共通・シーケンスモニタ異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,float,const_adiag_com_inv001_upper_limit,共通・インバータ電源異常①・上限値,[V],1.00E+00,static_param,0,o,o,－,－
+,float,const_adiag_com_inv001_lower_limit,共通・インバータ電源異常①・下限値,[V],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_com_inv001_err_time,共通・インバータ電源異常①・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,float,const_adiag_com_inv002_upper_limit,共通・インバータ電源異常②・上限値,[V],1.00E+00,static_param,0,o,o,－,－
+,float,const_adiag_com_inv002_lower_limit,共通・インバータ電源異常②・下限値,[V],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_com_inv002_err_time,共通・インバータ電源異常②・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,float,const_adiag_bldc_inv003_upper_limit,BLDC用・3相電圧加算異常・上限値,[V],1.00E+00,static_param,0,o,o,－,－
+,float,const_adiag_bldc_inv003_lower_limit,BLDC用・3相電圧加算異常・下限値,[V],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_bldc_inv003_err_time,BLDC用・3相電圧加算異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,float,const_adiag_bldc_cur001_upper_limit,BLDC用・3相電流加算異常・上限値,[A],1.00E+00,static_param,0,o,o,－,－
+,float,const_adiag_bldc_cur001_lower_limit,BLDC用・3相電流加算異常・下限値,[A],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_bldc_cur001_err_time,BLDC用・3相電流加算異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,int32_t,const_adiag_bldc_rev002_upper_limit,BLDC用・回転角センサ範囲外異常・上限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,int32_t,const_adiag_bldc_rev002_lower_limit,BLDC用・回転角センサ範囲外異常・下限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,uint16_t,const_adiag_bldc_rev002_err_time,BLDC用・回転角センサ範囲外異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,uint16_t,const_adiag_bldc_rev003_err_time,BLDC用・回転角センサオフセット異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,int32_t,const_adiag_bldc_pot002_upper_limit,BLDC用・位置センサ異常上限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,int32_t,const_adiag_bldc_pot002_lower_limit,BLDC用・位置センサ異常下限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,uint16_t,const_adiag_bldc_pot002_err_time,BLDC用・位置センサ異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,float,const_adiag_dc_inv004_upper_limit,DC用・２相電圧加算異常・上限値,[V],1.00E+00,static_param,0,o,o,－,－
+,float,const_adiag_dc_inv004_lower_limit,DC用・２相電圧加算異常・下限値,[V],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_dc_inv004_err_time,DC用・２相電圧加算異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,int32_t,const_adiag_dc_rev001_upper_limit,DC用・回転角センサモデル異常・上限値,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,int32_t,const_adiag_dc_rev001_lower_limit,DC用・回転角センサモデル異常・下限値,[rad/sec],1.00E+00,static_param,0,o,o,－,－
+,uint16_t,const_adiag_dc_rev001_err_time,DC用・回転角センサモデル異常・異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+,int32_t,const_adiag_dc_pot001_upper_limit,DC用・位置センサ異常上限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,int32_t,const_adiag_dc_pot001_lower_limit,DC用・位置センサ異常下限値,[urad],1.00E+06,static_param,0,o,o,－,－
+,uint16_t,const_adiag_dc_pot001_err_time,DC用・位置センサ異常確定時間,[ms],1.00E+03,static_param,0,o,o,－,－
+他の値のコピー,int32_t,_present_hand_motor_position,位置1・コピー,[urad],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+,int32_t,_present_hand_left_position,位置2・コピー,[urad],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int32_t,_present_hand_right_position,位置3・コピー,[urad],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int32_t,_present_hand_motor_velocity,速度1・コピー,[urad/s],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int32_t,_present_hand_left_velocity,速度2・コピー,[urad/s],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int32_t,_present_hand_right_velocity,速度3・コピー,[urad/s],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int16_t,_present_hand_left_force,現在力・コピー,[mN],1.00E+03,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int16_t,_present_hand_right_force,現在力・コピー,[mN],1.00E+03,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,uint8_t,_present_hand_grasping_flag,現在の握り込みフラグの状態・コピー,[0/1],－,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int32_t,_present_effort,現在トルク,[uNm],1.00E+06,present,0,x,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+,uint8_t,_present_supply_voltage,電源電圧・コピー,[V],1.00E+00,present,0,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int8_t,_present_temperature,現在基板温度・コピー,[degC],1.00E+00,present,0,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,－
+ ,int16_t,_present_current,現在電流・コピー,[mA],1.00E+03,present,0,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,uint8_t,_present_drive_mode,ドライブモードの現在の値・コピー,[-],－,present,－,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,uint16_t,_present_alarm_status,アラームステータス・コピー,[-],－,present,0,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+,uint32_t,_present_safety_alarm_status,機能安全用アラームステータス・コピー,[-],－,present,0,o,o,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,int64_t,_present_motor_outaxis_position,出力軸位置[urad]・コピー,[urad],1.00E+06,present,0,o,x,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,int64_t,_present_motor_outaxis_velocity,出力軸速度[urad/s]・コピー,[urad/s],1.00E+06,present,0,o,x,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,int64_t,_present_joint_calc_outaxis_correct_position,補正されたavagoから計算した出力軸位置・コピー,[urad],1.00E+06,present,0,o,x,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,
+ ,int64_t,_present_joint_calc_outaxis_correct_velocity,補正されたavagoから計算した出力軸速度・コピー,[urad/s],1.00E+06,present,0,o,x,上位からよく読み取る値のコピーを連続したアドレスに配置して読み取りのオーバーヘッドの軽減を狙ったもの。,

@@ -1,0 +1,9 @@
+<library path="hsrb_robot_hardware">
+  <class name="hsrb_robot_hardware/HsrbHW"
+         type="hsrb_robot_hardware::HsrbHW"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>
+      The ROS2 Control hsrb command and state interfaces.
+    </description>
+  </class>
+</library>

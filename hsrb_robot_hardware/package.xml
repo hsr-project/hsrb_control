@@ -1,0 +1,35 @@
+<package format="3">
+  <name>hsrb_robot_hardware</name>
+  <version>2.0.0</version>
+  <description>The main loop of hsrb hardware.</description>
+
+  <maintainer email="xr-hsr-support@mail.toyota.co.jp">HSR Support</maintainer>
+
+  <license>BSD 3-clause Clear License</license>
+
+  <author>Akiyoshi Ochiai</author>
+  <author>Keisuke Takeshita</author>
+  <author>Koji Terada</author>
+  <author>Masayuki Masuda</author>
+  <author>Tamaki Nishino</author>
+  <author>Yoshimi Iyoda</author>
+  <author>Yusuke Ota</author>
+  <author>Yutaka Takaoka</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <depend>ament_index_cpp</depend>
+  <depend>hardware_interface</depend>
+  <depend>hsrb_servomotor_protocol</depend>
+  <depend>rclcpp</depend>
+  <depend>tmc_utils</depend>
+  <depend>transmission_interface</depend>
+
+  <test_depend>ament_cmake_gmock</test_depend>
+  <test_depend>ament_cmake_gtest</test_depend>
+  <test_depend>exxx_control_table</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
